@@ -24,8 +24,8 @@ class HomeScreen : BaseActivity() {
     }
 
     private fun initView() {
-        userListView.layoutManager = LinearLayoutManager(this)
-        val swipeHandler = object : SwipeDeleteMenu(this) {
+        userListView.layoutManager = LinearLayoutManager(applicationContext)
+        val swipeHandler = object : SwipeDeleteMenu(applicationContext) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
                 val adapter: UserAdapter = userListView.adapter as UserAdapter
                 adapter.removeAt(viewHolder!!.adapterPosition)
