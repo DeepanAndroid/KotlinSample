@@ -1,5 +1,5 @@
 # KotlinSample
-Sample app for kotlin with data binding concept
+Sample app - kotlin with data binding concept
 
 
 
