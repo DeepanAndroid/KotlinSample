@@ -42,10 +42,10 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
         mDbHandlerThread.start()
 
         mUserDataBase = UserDataBase.getInstance(applicationContext)
-        userListView.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        this.userListView.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         val swipeHandler = object : SwipeDeleteMenu(applicationContext) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
-                var pos = viewHolder!!.adapterPosition
+                val pos = viewHolder!!.adapterPosition
                 deleteSingleUserData(mUserList[pos].UserName)
                 val adapter: UserAdapter = userListView.adapter as UserAdapter
                 adapter.removeAt(pos)
@@ -73,7 +73,7 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
 
     private fun insertToUserData(mUserList: ArrayList<UserModel>) {
         for (item in mUserList) {
-            var userData = UserData(null, item.UserName)
+            val userData = UserData(null, item.UserName)
             val task = Runnable { mUserDataBase?.userDataAccess()?.insert(userData) }
             mDbHandlerThread.postTask(task)
         }
@@ -84,12 +84,12 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
         val task = Runnable {
             val localData = mUserDataBase?.userDataAccess()?.getAll()
             mUiHandler.post {
-                if (localData == null || localData.size == 0) {
+                if (localData == null || localData.isEmpty()) {
                     addUserList()
                 } else {
                     mUserList.clear()
                     for (item in localData) {
-                        var userData = UserModel(item.username)
+                        val userData = UserModel(item.username)
                         mUserList += userData
                         setAdapter()
                     }
@@ -104,7 +104,7 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
             mUserDataBase?.userDataAccess()?.deleteAll()
             val userData = mUserDataBase?.userDataAccess()?.getAll()
             mUiHandler.post {
-                if (userData == null || userData.size == 0) {
+                if (userData == null || userData.isEmpty()) {
                     showToast("All records are cleared")
                     mUserList.clear()
                     setAdapter()
