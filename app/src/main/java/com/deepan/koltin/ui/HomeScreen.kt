@@ -49,6 +49,7 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
                 deleteSingleUserData(mUserList[pos].UserName)
                 val adapter: UserAdapter = userListView.adapter as UserAdapter
                 adapter.removeAt(pos)
+                setDeleteButton()
 
             }
         }
@@ -101,15 +102,14 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
 
     private fun deleteAllUserData() {
         val task = Runnable {
-            mUserDataBase?.userDataAccess()?.deleteAll()
-            val userData = mUserDataBase?.userDataAccess()?.getAll()
+            val count = mUserDataBase?.userDataAccess()?.deleteAll()
             mUiHandler.post {
-                if (userData == null || userData.isEmpty()) {
+                if (count!! > 0) {
                     showToast("All records are cleared")
                     mUserList.clear()
                     setAdapter()
                 } else {
-                    sysout("Something went wrong while clear local DB")
+                    showToast("Already cleared")
                 }
             }
         }
@@ -118,7 +118,14 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
 
     private fun deleteSingleUserData(username: String) {
         val task = Runnable {
-            mUserDataBase?.userDataAccess()?.deleteSingleItem(username)
+            val count = mUserDataBase?.userDataAccess()?.deleteSingleItem(username)
+            mUiHandler.post {
+                if (count == 1) {
+                    showToast("Selected row deleted")
+                } else {
+                    showToast("Something went wrong while clear local DB")
+                }
+            }
         }
         mDbHandlerThread.postTask(task)
     }
@@ -131,6 +138,16 @@ class HomeScreen : BaseActivity(), View.OnClickListener {
         }
         end = mUserList.size
         userListView.scrollToPosition(mUserList.size - 1)
+        setDeleteButton()
+    }
+
+    private fun setDeleteButton() {
+        if (mUserList.size > 0) {
+            delete_btn.visibility=View.VISIBLE
+        } else {
+            delete_btn.visibility=View.GONE
+        }
+
     }
 
     override fun onClick(v: View?) {

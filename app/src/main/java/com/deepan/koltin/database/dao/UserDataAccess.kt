@@ -16,10 +16,10 @@ interface UserDataAccess {
     fun insert(userData: UserData)
 
     @Query("DELETE FROM userData")
-    fun deleteAll()
+    fun deleteAll(): Int
 
     @Query("DELETE FROM userData WHERE username LIKE :username")
-    fun deleteSingleItem(username: String)
+    fun deleteSingleItem(username: String): Int
 
     @Query("UPDATE userData SET username =:newusername WHERE username LIKE :username")
     fun updateSingleItem(username: String,newusername: String)

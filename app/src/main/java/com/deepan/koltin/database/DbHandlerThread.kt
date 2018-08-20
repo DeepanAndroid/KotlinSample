@@ -10,7 +10,6 @@ class DbHandlerThread(threadName: String, priority: Int) : HandlerThread(threadN
     override fun onLooperPrepared() {
         super.onLooperPrepared()
         mHandler = Handler(looper)
-        HandlerThread.MIN_PRIORITY
     }
 
     fun postTask(task: Runnable) {
